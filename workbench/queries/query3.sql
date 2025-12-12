@@ -1,0 +1,5 @@
+# PETS WITH UNKNOWN CAUSE OF DEATH
+
+SELECT * 
+FROM pet
+WHERE cause_of_death IS NULL;

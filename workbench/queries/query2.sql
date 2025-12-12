@@ -1,5 +1,5 @@
 # ALIVE VISITORS
 
-SELECT * 
+SELECT name, visitor_type 
 FROM visitor
 WHERE is_alive = 1;

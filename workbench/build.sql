@@ -25,7 +25,7 @@ CREATE TABLE Caretaker (
 -- SECTION
 CREATE TABLE Section (
   name VARCHAR(50) PRIMARY KEY,
-  caretaker_id INT NOT NULL,
+  caretaker_id INT,
   danger_level ENUM('low','mid','high','cursed'),
   access_restrictions TEXT,
   FOREIGN KEY (caretaker_id)
@@ -53,7 +53,7 @@ CREATE TABLE Burial_Plot (
 CREATE TABLE Pet (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
-  owner_id INT NOT NULL,
+  owner_id INT,
   species VARCHAR(50),
   date_of_birth VARCHAR(10),
   date_of_death VARCHAR(10),
@@ -62,8 +62,8 @@ CREATE TABLE Pet (
   temperament VARCHAR(50),
   appearance_changes TEXT,
 
-  section_name VARCHAR(50) NOT NULL,
-  plot_number INT NOT NULL,
+  section_name VARCHAR(50),
+  plot_number INT,
 
   FOREIGN KEY (owner_id)
     REFERENCES Owner(id)
@@ -90,10 +90,10 @@ CREATE TABLE Ritual (
 CREATE TABLE Resurrection_Event (
   id INT AUTO_INCREMENT PRIMARY KEY,
   pet_id INT NOT NULL,
-  ritual_name VARCHAR(50) NOT NULL,
+  ritual_name VARCHAR(50),
   date VARCHAR(10),
   time VARCHAR(5),
-  moon_phase ENUM('New Moon','First Quarter','Full Moon','Last Quarter'),
+  moon_phase ENUM('New Moon', 'First Quarter', 'Full Moon', 'Last Quarter'),
   weather VARCHAR(50),
   FOREIGN KEY (pet_id)
     REFERENCES Pet(id)
@@ -110,7 +110,7 @@ CREATE TABLE Visitor (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(50),
   age INT,
-  visitor_type ENUM('Tourist','Researcher','Miscellaneous','Family'),
+  visitor_type ENUM('Tourist', 'Researcher', 'Miscellaneous', 'Family'),
   purpose_of_visit TEXT,
   is_alive BIT(1)
 ) ENGINE=InnoDB;
@@ -155,26 +155,46 @@ CREATE TABLE WitnessEvent (
 
 -- CARETAKER
 INSERT INTO Caretaker VALUES
-(1,'Jud Crandall',33,1),
-(2,'Joe Strummer',2,0);
+(1, 'Jud Crandall', 33, 1),
+(2, 'Joe Strummer', 2, 0);
 
 -- SECTION
 INSERT INTO Section VALUES
-('Micmac Grounds',1,'cursed','Authorized personnel only.'),
-('Pet Memorial Park',2,'mid','Daytime access only.'),
-('Forest Perimeter',2,'low','Open to public.');
+('Micmac Grounds', 1, 'cursed', 'Authorized personnel only.'),
+('Pet Memorial Park', 2, 'mid', 'Daytime access only.'),
+('Forest Perimeter', 2, 'low', 'Open to public.');
 
 -- BURIAL PLOT
 INSERT INTO Burial_Plot VALUES
-('Micmac Grounds', 1, 'Black cotton soil','Here Lies Brian Griffin\nBeloved Friend, Failed Author',1,'2013-11-30'),
-('Pet Memorial Park', 1, 'Black cotton soil','Herein lies Garfield\nMay his rest finally be… uninterrupted',1,'2016-12-26'),
-('Micmac Grounds', 2, 'Clay soil',NULL,0,'1999-10-05');
+('Micmac Grounds', 1, 'Black cotton soil', 'Here Lies Brian Griffin. Beloved Friend, Failed Author', 1, '2013-11-30'),
+('Pet Memorial Park', 1, 'Black cotton soil', 'Herein lies Garfield. May his rest finally be… uninterrupted', 1, '2016-12-26'),
+('Micmac Grounds', 2, 'Clay soil', NULL, 0, '1999-10-05'),
+('Pet Memorial Park', 2, 'Soft soil', 'Here lies Snoopy, faithful dreamer', 1, '1999-10-10'),
+('Pet Memorial Park', 3, 'Soft soil', 'Scooby-Doo, forever afraid', 1, '2005-04-02'),
+('Forest Perimeter', 1, 'Rocky soil', 'Hachiko, eternal loyalty', 1, '1935-03-08'),
+('Micmac Grounds', 3, 'Dark soil', 'Laika, lost to the stars', 0, '1960-04-12'),
+('Pet Memorial Park', 4, 'Soft soil', 'Bolt, good boy', 1, '2010-08-18'),
+('Micmac Grounds', 4, 'Cold soil', 'Salem, returned differently', 0, '1997-10-31'),
+('Pet Memorial Park', 5, 'Soft soil', 'Tom, finally at rest', 1, '2002-06-01'),
+('Pet Memorial Park', 6, 'Soft soil', 'Snowball II, again', 1, '1992-02-13'),
+('Forest Perimeter', 2, 'Loose soil', 'Stuart Little, too small', 0, '2000-07-15'),
+('Micmac Grounds', 5, 'Ancient soil', 'Toothless, silent shadow', 0, '2019-03-22');
 
 -- OWNER
-INSERT INTO Owner VALUES
-(1,'Peter Griffin','31 Spooner Street, Quahog, Rhode Island','Sad'),
-(2,'Jon Arbuckle','22 Robinwood, Muncie, Indiana','Kinda Happy'),
-(3,'Mickey Mouse','Disneyland, Anaheim, California','Distraught');
+INSERT INTO Owner (name, address, mental_state) VALUES
+('Peter Griffin', '31 Spooner Street', 'Sad'),
+('Jon Arbuckle', 'Muncie, Indiana', 'Kinda Happy'),
+('Mickey Mouse', 'Disneyland', 'Distraught'),
+('Charlie Brown', 'Peanuts Street', 'Melancholic'),
+('Shaggy Rogers', 'Crystal Cove', 'Anxious'),
+('Professor Ueno', 'Tokyo, Japan', 'Grieving'),
+('Unnamed Soviet Astronaut', 'Baikonur Cosmodrome', 'Guilt'),
+('Penny', 'Hollywood', 'Hopeful'),
+('Sabrina Spellman', 'Greendale', 'Uneasy'),
+('Jerry', 'Unknown Wall Hole', 'Relieved'),
+('Homer Simpson', '742 Evergreen Terrace', 'Confused'),
+('Little Family', 'New York City', 'Worried'),
+('Hiccup Horrendous Haddock', 'Berk', 'Determined');
 
 -- PET
 INSERT INTO Pet (
@@ -182,39 +202,89 @@ INSERT INTO Pet (
   cause_of_death, resurrection_status, temperament, appearance_changes,
   section_name, plot_number
 ) VALUES
-(1,'Brian Griffin',1,'Dog','1999-01-31','2013-11-24','Car Accident',1,'Angry','Mouth sewn shut','Micmac Grounds',1),
-(2,'Garfield',2,'Cat','1978-01-02','2016-12-24','Choking',1,'Hungry','Slit Stomach','Pet Memorial Park',1),
-(3,'Pluto',3,'Dog','1930-05-09','1999-09-25',NULL,0,NULL,NULL,'Micmac Grounds',2);
+(1, 'Brian Griffin', 1, 'Dog', '1999-01-31', '2013-11-24', 'Car Accident', 1, 'Angry', 'Mouth sewn shut', 'Micmac Grounds',1),
+(2, 'Garfield', 2, 'Cat', '1978-01-02', '2016-12-24', 'Choking', 1, 'Hungry', 'Slit Stomach', 'Pet Memorial Park',1),
+(3, 'Pluto', 3, 'Dog', '1930-05-09', '1999-09-25', NULL, 0, NULL, NULL, 'Micmac Grounds',2),
+(4, 'Snoopy', 4, 'Dog', '1950-10-04', '1999-10-04', 'Old age', 0, 'Calm', NULL, 'Pet Memorial Park', 2),
+(5, 'Scooby-Doo', 5, 'Dog', '1969-09-13', '2005-03-28', 'Fright-induced heart failure', 1, 'Fearful', 'Eyes refuse to close', 'Pet Memorial Park', 3),
+(6, 'Toothless', 13, 'Dragon', '2010-03-26', '2019-03-22', 'Unknown ritual side effect', 1, 'Unnaturally Calm', 'Scales darkened permanently', 'Micmac Grounds', 5),
+(7, 'Tom', 10, 'Cat', '1940-02-10', '2002-06-01', 'Blunt trauma', 0, 'Aggressive', NULL, 'Pet Memorial Park', 5),
+(8, 'Bolt', 8, 'Dog', '2008-11-21', '2010-08-18', 'Accident', 0, 'Energetic', NULL, 'Pet Memorial Park', 4),
+(9, 'Salem', 9, 'Cat', '1996-01-01', '1997-10-31', 'Unknown', 1, 'Hostile', 'Eyes glow faintly red', 'Micmac Grounds', 4),
+(10, 'Laika', 7, 'Dog', '1954-01-01', '1960-04-12', 'Orbital failure', 1, 'Silent', 'Burn marks beneath fur', 'Micmac Grounds', 3),
+(11, 'Snowball II', 11, 'Cat', '1989-04-19', '1992-02-13', 'Multiple incidents', 1, 'Unstable', 'Missing fur patches', 'Pet Memorial Park', 6),
+(12, 'Stuart Little', 12, 'Mouse', '1999-12-17', '2000-07-15', 'Predation', 0, 'Nervous', NULL, 'Forest Perimeter', 2),
+(13, 'Hachiko', 6,  'Dog', '1923-11-10', '1935-03-08', 'Starvation', 0, 'Loyal', NULL, 'Forest Perimeter', 1);
 
 -- RITUAL
 INSERT INTO Ritual VALUES
-('Moonlit Return','an animal shaped candle, a whisker from the pet','Tusen takk for gild helsing, Knut!','Ancient tribes believed...',45.26,1),
-('Whispered Passage','a small clay tube, the ashes of a sacred herb, the pet''s collar','Saelon vora, hear my call...','Old forest legends...',28.30,0),
-('Ancestral Awakening','red-sage ceremonial herb, stone circle, drop of owner blood','Ekoran thulei...','Ancestral bloodline...',74.00,0);
+('Moonlit Return', 'An animal shaped candle, a whisker from the pet', 'Tusen takk for gild helsing, Knut!',
+ 'Ancient tribes believed that the full moon opened a passage through which loyal animals could return to the living world.', 45.26, 1),
+('Whispered Passage', 'A small clay tube, the ashes of a sacred herb, the pet''s collar', 'Saelon vora, hear my call Cross the veil and rise from fall',
+ 'It is said that the old forest guardians would leave whispered messages on the graves so that wandering spirits could find their way back.', 28.30, 0),
+('Ancestral Awakening', 'Red-sage ceremonial herb, stone circle, drop of owner blood', 'Ekoran thulei, spirits near awaken kin we hold so dear',
+ 'An ancient ceremony practiced by tribes', 74.00, 0),
+('Gravebound Whisper', 'Black candle, soil from first grave', 'Mortis voca, terra audi',
+ 'An old Micmac burial chant used only when the ground has already tasted death.', 22.50, 1),
+('Echo of Loyalty', 'Personal belonging of the pet, lock of fur', 'Return not as you were, but as you remember',
+ 'A ritual believed to work only on animals with extreme loyalty.', 55.00, 0);
 
 -- RESURRECTION EVENTS
 INSERT INTO Resurrection_Event VALUES
-(1,1,'Moonlit Return','2003-05-18','01:30','Full Moon','Storm'),
-(2,2,'Ancestral Awakening','2015-09-30','12:05','New Moon','Cloudy');
+-- Brian
+(1, 1, 'Moonlit Return', '2003-05-18', '01:30', 'Full Moon', 'Storm'),
+-- Garfeild
+(2, 2, 'Ancestral Awakening', '2015-09-30', '12:05', 'New Moon', 'Cloudy'),
+-- Scooby-Doo
+(3, 5, 'Echo of Loyalty', '2005-04-01', '22:45', 'Full Moon', 'Fog'),
+-- Laika
+(4, 10, 'Moonlit Return', '1960-04-13', '01:10', 'New Moon', 'Clear'),
+-- Salem
+(5, 9, 'Gravebound Whisper', '1997-11-01', '23:59', 'Full Moon', 'Windy'),
+-- Snowball II
+(6, 11, 'Gravebound Whisper', '1992-02-14', '21:30', 'Last Quarter', 'Snow'),
+-- Toothless
+(7, 6, 'Ancestral Awakening', '2019-03-23', '00:05', 'New Moon', 'Storm'),
+-- Tom
+(8, 7, 'Echo of Loyalty', '2002-06-02', '21:00', 'Last Quarter', 'Clear');
+
 
 -- VISITOR
 INSERT INTO Visitor VALUES
-(1,'Marjorie Holloway',62,'Family','Visiting the grave of her childhood dog',1),
-(2,'Elias Crowe',34,'Researcher','Documenting unexplained events',0),
-(3,'Timothy Wexler',12,'Miscellaneous','Looking for his missing cat',0);
+(1, 'Marjorie Holloway', 62, 'Family', 'Visiting the grave of her childhood dog', 1),
+(2, 'Elias Crowe', 34, 'Researcher', 'Documenting unexplained events', 0),
+(3, 'Timothy Wexler', 12, 'Miscellaneous', 'Looking for his missing cat', 0),
+(4, 'Dana Creed', 38, 'Family', 'Checking old burial grounds', 1),
+(5, 'Mark Petrie', 29, 'Researcher', 'Studying resurrection patterns', 1),
+(6, 'Eleanor Finch', 67, 'Tourist', 'Visiting famous graves', 1),
+(7, 'Lucas Bell', 15, 'Miscellaneous', 'Exploring forbidden areas', 1),
+(8, 'Jane Doe', 20, 'Miscellaneous', 'Unidentified presence', 0);
 
 -- VISITOR ACCESS
 INSERT INTO VisitorAccess VALUES
 (1,'Micmac Grounds',5),
 (1,'Pet Memorial Park',10),
 (2,'Pet Memorial Park',12),
-(2,'Micmac Grounds',3);
+(2,'Micmac Grounds',3),
+(4, 'Pet Memorial Park', 30),
+(5, 'Micmac Grounds', 15),
+(5, 'Forest Perimeter', 60),
+(6, 'Pet Memorial Park', 20),
+(7, 'Forest Perimeter', 10);
 
 -- WITNESS EVENTS
 INSERT INTO WitnessEvent VALUES
-(1,1,'High',5,'No one lived to tell the tale'),
-(3,2,'Low',0,'A kid saw something weird and fell'),
-(3,1,'Mid',2,'I think I see something coming… DUCK!');
+(1, 1, 'High', 5, 'No one lived to tell the tale'),
+(3, 2, 'Low', 0, 'A kid saw something weird and fell'),
+(3, 1, 'Mid', 2, 'I think I see something coming… DUCK!'),
+(4, 3, 'High', 1, 'Subject emerged altered and aggressive'),
+(5, 2, 'Fatal', 3, 'Resurrection caused structural collapse'),
+(6, 4, 'Low', 0, 'Witness reported strange sounds'),
+(7, 8, 'Mid', 1, 'Entity moved unnaturally fast'),
+(8, 5, 'Fatal', 2, 'No physical remains recovered'),
+(5, 1, 'Mid', 0, 'Subject responded to owner voice'),
+(6, 7, 'High', 2, 'Multiple injuries reported'),
+(4, 6, 'Low', 0, 'Subject showed recognition behavior');
 
 -- ==========================================
 -- CREATE VIEWS

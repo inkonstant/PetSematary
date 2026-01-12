@@ -4,13 +4,13 @@ import { getRituals } from '../api/client.js';
 import { useReality } from '../context/RealityContext.jsx';
 
 /**
- * Rituals screen displays the list of resurrection rituals.  In
- * research mode only names and success rates are shown.  In other
+ * Rituals screen displays the list of resurrection rituals. In
+ * research mode only names and success rates are shown. In other
  * modes all fields are displayed, and chants that are redacted are
  * styled appropriately.
  */
 export default function Rituals() {
-  const { mode } = useReality();
+  const { mode } = useReality(); // Ανάκτηση του τρέχοντος mode
   const [rituals, setRituals] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -47,42 +47,59 @@ export default function Rituals() {
   }, [mode]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p className={mode === 'research' ? 'terminal-text' : ''}>Loading...</p>;
   }
   if (error) {
-    return <p>{error}</p>;
+    return <p className={mode === 'research' ? 'terminal-text' : ''}>{error}</p>;
   }
 
   return (
-    <div>
+    <div className={mode === 'research' ? 'terminal-wrapper' : ''}>
       <motion.h2
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Rituals
+        {mode === 'research' ? '> ACCESSING_RITUAL_LOGS' : 'Rituals'}
       </motion.h2>
+
+      {/* TERMINAL TEMPLATE ΓΙΑ ΤΟ RESEARCH MODE */}
       {mode === 'research' ? (
-        <div>
-          <p>Total rituals: {total}</p>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Success Rate</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rituals.map((r) => (
-                <tr key={r.name}>
-                  <td>{r.name}</td>
-                  <td>{parseFloat(r.success_rate).toFixed(2)}%</td>
+        <div className="terminal-container">
+          <div className="terminal-header">
+            <div className="terminal-title">CONSOLE // RITUAL_DATABASE</div>
+            <div className="terminal-controls">
+              <span className="t-dot red"></span>
+              <span className="t-dot yellow"></span>
+              <span className="t-dot green"></span>
+            </div>
+          </div>
+          <div className="terminal-content">
+            <p className="terminal-stats">STATUS: CONNECTION_ESTABLISHED</p>
+            <p className="terminal-stats">TOTAL_RECORDS_FOUND: {total}</p>
+            <table className="terminal-table">
+              <thead>
+                <tr>
+                  <th>[NAME]</th>
+                  <th>[SUCCESS_RATE]</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {rituals.map((r) => (
+                  <tr key={r.name}>
+                    <td>{'> ' + r.name}</td>
+                    <td>{parseFloat(r.success_rate).toFixed(2)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="terminal-prompt">
+              researcher@petsematary:~$ <span className="blink-cursor">_</span>
+            </div>
+          </div>
         </div>
       ) : (
+        /* STANDARD TABLE ΓΙΑ OFFICIAL & REDACTED MODES */
         <table>
           <thead>
             <tr>

@@ -1,13 +1,8 @@
 /*
- * Global stylesheet for the Pet Sematary Portal.  The aim of this
- * file is to set up a dark, spooky baseline for all screens.  We
- * define CSS variables on the root element that control colours and
- * fonts depending on the current reality mode.  The React app
- * toggles classes on the body element (mode-official, mode-redacted,
- * mode-research) to switch themes.
+ * Global stylesheet for the Pet Sematary Portal.
  */
 
-/* Base reset to remove default browser margins and paddings. */
+/* Base reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -32,14 +27,13 @@ body {
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-/* Colour variables for each mode.  React will toggle these by
- * changing the class on the body element. */
 body.mode-official {
   --bg-color: #151515;
   --text-color: #e4e4e4;
-  --accent-color: #8b0000; /* deep red */
+  --accent-color: #8b0000;
   --panel-bg: rgba(32, 32, 32, 0.8);
 }
+
 body.mode-redacted {
   font-family: 'IM Fell English', 'Cinzel', serif;
   letter-spacing: 0.03em;
@@ -50,17 +44,17 @@ body.mode-redacted {
   cursor: help;
   animation: breathe 8s infinite ease-in-out;
 }
+
+/* Grayscale Research Mode */
 body.mode-research {
-  /* Research mode uses a washed out palette reminiscent of an old
-   * monochrome terminal. */
   --bg-color: #080808;
-  --text-color: #c0c0c0;
-  --accent-color: #009688; /* teal for subtle highlights */
+  --text-color: #e0e0e0;
+  --accent-color: #ffffff;
   --panel-bg: rgba(8, 8, 8, 0.9);
   font-family: 'Courier New', Courier, monospace;
 }
 
-/* Typography helpers */
+/* Typography */
 h1, h2, h3, h4 {
   font-family: inherit;
   margin-bottom: 0.5rem;
@@ -71,7 +65,6 @@ p, li {
   line-height: 1.6;
 }
 
-/* Layout container */
 .container {
   width: 90%;
   max-width: 1200px;
@@ -79,7 +72,7 @@ p, li {
   padding: 1.5rem 0;
 }
 
-/* Navigation bar */
+/* Navigation */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -87,11 +80,6 @@ p, li {
   padding: 1rem;
   background-color: var(--panel-bg);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.nav-buttons {
-  display: flex;
-  gap: 1rem;
 }
 
 .nav-button {
@@ -104,57 +92,8 @@ p, li {
   transition: color 0.2s ease;
 }
 
-.nav-button.active,
-.nav-button:hover {
+.nav-button.active, .nav-button:hover {
   color: var(--accent-color);
-}
-
-/* Mode selector styling */
-.mode-selector {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-color);
-  font-size: 0.9rem;
-}
-
-.mode-selector select {
-  background-color: var(--panel-bg);
-  color: var(--text-color);
-  border: 1px solid var(--accent-color);
-  padding: 0.3rem 0.6rem;
-  border-radius: 4px;
-}
-
-/* Cards used on the dashboard */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-
-.card {
-  background-color: var(--panel-bg);
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
-}
-
-.card h3 {
-  margin-bottom: 0.4rem;
-  font-size: 1.2rem;
-}
-
-.card p {
-  font-size: 1.6rem;
-  font-weight: bold;
 }
 
 /* Tables */
@@ -175,251 +114,97 @@ th {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Search input */
-.search-container {
-  margin: 1rem 0;
-}
-
-.search-container input {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  font-size: 1rem;
-  background-color: var(--panel-bg);
-  color: var(--text-color);
-  border: 1px solid var(--accent-color);
-  border-radius: 4px;
-}
-
-/* Dossier / Panel overlay for pet details */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  overflow-y: auto;
-  padding-top: 5vh;
-  z-index: 1000;
-}
-
-.panel {
-  background-color: var(--panel-bg);
-  border: 1px solid var(--accent-color);
-  border-radius: 8px;
-  padding: 1.5rem;
-  width: 90%;
-  max-width: 600px;
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5);
-}
-
-.panel-close {
-  font-size: 1.5rem;
-  float: right;
-  cursor: pointer;
-  color: var(--accent-color);
-}
-
-/* Redacted text style */
+/* Redacted style */
 .redacted {
   color: var(--accent-color);
   font-weight: bold;
-    background: repeating-linear-gradient(
-    45deg,
-    rgba(0,0,0,0.9),
-    rgba(0,0,0,0.9) 4px,
-    rgba(139,0,0,0.8) 6px
-  );
+  background: repeating-linear-gradient(45deg, rgba(0,0,0,0.9), rgba(0,0,0,0.9) 4px, rgba(139,0,0,0.8) 6px);
   padding: 0 4px;
-  text-shadow: 0 0 6px rgba(139,0,0,0.8);
   animation: flicker 3s infinite ease-in-out;
-}
-
-/* Glitch effect for text.  We create two pseudo-elements that shift
- * slightly and apply colour changes to simulate a glitch.  The
- * animation runs infinitely. */
-.glitch {
-  position: relative;
-  display: inline-block;
-  color: var(--accent-color);
-}
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-.glitch::before {
-  left: 2px;
-  text-shadow: -2px 0 var(--accent-color);
-  animation: glitch-anim-1 2s infinite linear alternate-reverse;
-}
-.glitch::after {
-  left: -2px;
-  text-shadow: -2px 0 var(--accent-color);
-  animation: glitch-anim-2 3s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-anim-1 {
-  0% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  10% {
-    clip: rect(0, 9999px, 10px, 0);
-  }
-  20% {
-    clip: rect(0, 9999px, 5px, 0);
-  }
-  30% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  40% {
-    clip: rect(0, 9999px, 15px, 0);
-  }
-  50% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  60% {
-    clip: rect(0, 9999px, 10px, 0);
-  }
-  70% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  80% {
-    clip: rect(0, 9999px, 8px, 0);
-  }
-  90% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  100% {
-    clip: rect(0, 9999px, 12px, 0);
-  }
-}
-
-@keyframes glitch-anim-2 {
-  0% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  15% {
-    clip: rect(0, 9999px, 12px, 0);
-  }
-  25% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  35% {
-    clip: rect(0, 9999px, 8px, 0);
-  }
-  45% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  55% {
-    clip: rect(0, 9999px, 5px, 0);
-  }
-  65% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  75% {
-    clip: rect(0, 9999px, 10px, 0);
-  }
-  85% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  100% {
-    clip: rect(0, 9999px, 15px, 0);
-  }
 }
 
 @keyframes flicker {
   0% { opacity: 1; }
-  45% { opacity: 0.9; }
   50% { opacity: 0.4; }
-  55% { opacity: 1; }
-  100% { opacity: 0.95; }
+  100% { opacity: 1; }
 }
 
-@keyframes breathe {
-  0% { background-color: #000000; }
-  25% { background-color: #1e0101; }
-  75% { background-color: #2f0909; }
-  100% { background-color: #1e0101; }
+/* ==========================================
+   Terminal Specific Styles (Research Mode)
+   ========================================== */
+body.mode-research .terminal-container {
+  background-color: #080808;
+  border: 1px solid #ffffff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
 }
 
-/* Entry screen styles */
-.entry-wrapper {
+body.mode-research .terminal-header {
+  background-color: #1a1a1a;
+  padding: 8px 12px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 100vh;
-  background-color: var(--bg-color);
-  text-align: center;
+  border-bottom: 1px solid #ffffff;
 }
 
-.entry-wrapper h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+body.mode-research .terminal-title {
+  font-size: 0.8rem;
+  color: #ffffff;
+  font-weight: bold;
 }
 
-.entry-wrapper p {
-  max-width: 600px;
-  margin-bottom: 2rem;
-  color: var(--text-color);
+body.mode-research .t-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+body.mode-research .t-dot.red { background-color: #444; }
+body.mode-research .t-dot.yellow { background-color: #888; }
+body.mode-research .t-dot.green { background-color: #bbb; }
+
+body.mode-research .terminal-content {
+  padding: 15px;
+  font-family: 'Courier New', Courier, monospace;
 }
 
-.entry-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+body.mode-research .terminal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  background: transparent;
+}
+
+body.mode-research .terminal-table th {
+  color: #ffffff;
+  border-bottom: 1px solid #ffffff;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.mode-research .terminal-table td {
+  color: #c0c0c0;
   border: none;
-  background-color: var(--accent-color);
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 8px;
 }
 
-/* A darker accent on hover for the entry button.  We can't use the
- * Sass darken() function in plain CSS, so we approximate by
- * manually specifying a darker shade. */
-.entry-button:hover {
-  background-color: #600000;
+body.mode-research .terminal-prompt {
+  color: #ffffff;
+  margin-top: 10px;
 }
 
-/* =========================
-   Dashboard Section Spacing
-   ========================= */
-
-.dashboard-section {
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  position: relative;
+body.mode-research .blink-cursor {
+  animation: flicker 1s infinite;
+  font-weight: bold;
+  color: #ffffff;
 }
 
-.dashboard-section h2 {
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.25rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-}
-
-/* Subtle cinematic divider */
-.dashboard-section::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 40%;
-  height: 2px;
-  background: linear-gradient(
-    to right,
-    var(--accent-color),
-    transparent
-  );
-  opacity: 0.6;
+body.mode-research .terminal-stats {
+  color: #888;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
 }

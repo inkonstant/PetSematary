@@ -54,8 +54,8 @@ body.mode-research {
   /* Research mode uses a washed out palette reminiscent of an old
    * monochrome terminal. */
   --bg-color: #080808;
-  --text-color: #c0c0c0;
-  --accent-color: #009688; /* teal for subtle highlights */
+  --text-color: #e0e0e0;
+  --accent-color: #ffffff; 
   --panel-bg: rgba(8, 8, 8, 0.9);
   font-family: 'Courier New', Courier, monospace;
 }
@@ -576,7 +576,7 @@ body.mode-redacted::after {
   z-index: 9999;
 
   background: radial-gradient(
-    circle at var(--mouse-x, 100%) var(--mouse-y, 100%),
+    circle at var(--mouse-x, 200%) var(--mouse-y, 200%),
     rgba(0, 0, 0, 0) 0px,
     rgba(0, 0, 0, 0.2) 60px,
     rgba(0, 0, 0, 0.85) 160px,
@@ -598,4 +598,84 @@ body.mode-redacted::after {
 /* Optional: slightly dim the whole UI in redacted mode */
 body.mode-redacted {
   background-color: #080808;
+}
+
+/* ==========================================
+   Terminal Specific Styles (Research Mode)
+   ========================================== */
+body.mode-research .terminal-container {
+  background-color: #080808;
+  border: 1px solid #ffffff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
+}
+
+body.mode-research .terminal-header {
+  background-color: #1a1a1a;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ffffff;
+}
+
+body.mode-research .terminal-title {
+  font-size: 0.8rem;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+body.mode-research .t-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+body.mode-research .t-dot.red { background-color: #444; }
+body.mode-research .t-dot.yellow { background-color: #888; }
+body.mode-research .t-dot.green { background-color: #bbb; }
+
+body.mode-research .terminal-content {
+  padding: 15px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+body.mode-research .terminal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  background: transparent;
+}
+
+body.mode-research .terminal-table th {
+  color: #ffffff;
+  border-bottom: 1px solid #ffffff;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.mode-research .terminal-table td {
+  color: #c0c0c0;
+  border: none;
+  padding: 8px;
+}
+
+body.mode-research .terminal-prompt {
+  color: #ffffff;
+  margin-top: 10px;
+}
+
+body.mode-research .blink-cursor {
+  animation: flicker 1s infinite;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+body.mode-research .terminal-stats {
+  color: #888;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
 }

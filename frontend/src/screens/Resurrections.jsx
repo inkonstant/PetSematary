@@ -119,33 +119,31 @@ export default function Resurrections() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <span className={`censor-tape ${mode === 'redacted' ? 'is-censored' : ''}`}>
-          Resurrections
-        </span>
+        {mode === 'research' ? '> EVENT_LOGS_DECRYPTED' : (
+          <span className={`censor-tape ${mode === 'redacted' ? 'is-censored' : ''}`}>
+            Resurrections
+          </span>
+        )}
       </motion.h2>
       {mode === 'research' ? (
-        <div>
-          <p>Total events: {total}</p>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Pet ID</th>
-                <th>Ritual</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {events.map((ev) => (
-                <tr key={ev.id}>
-                  <td>{ev.id}</td>
-                  <td>{ev.pet_id}</td>
-                  <td>{ev.ritual_name}</td>
-                  <td>{ev.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="terminal-container">
+          <div className="terminal-header">
+            <div className="terminal-title">CONSOLE // EVENT_DATABASE</div>
+            <div className="terminal-controls"><span className="t-dot red"></span><span className="t-dot yellow"></span><span className="t-dot green"></span></div>
+          </div>
+          <div className="terminal-content">
+            <p className="terminal-stats">MODE: READ_ONLY</p>
+            <p className="terminal-stats">LOG_ENTRIES: {total}</p>
+            <table className="terminal-table">
+              <thead><tr><th>[ID]</th><th>[PET_ID]</th><th>[RITUAL]</th><th>[DATE]</th></tr></thead>
+              <tbody>
+                {events.map((ev) => (
+                  <tr key={ev.id}><td>{ev.id}</td><td>{ev.pet_id}</td><td>{ev.ritual_name}</td><td>{ev.date}</td></tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="terminal-prompt">researcher@petsematary:~$ <span className="blink-cursor">_</span></div>
+          </div>
         </div>
       ) : (
         <div>

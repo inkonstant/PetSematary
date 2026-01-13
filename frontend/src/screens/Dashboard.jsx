@@ -87,7 +87,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          Dashboard
+          {mode === 'research' ? '> SYSTEM_OVERVIEW' : 'Dashboard'}
         </motion.h2>
         {/* Overview cards */}
         <div className="cards">
@@ -123,7 +123,22 @@ export default function Dashboard() {
       </section>
       {/* Section risk table */}
       <section className="dashboard-section">
-        <h2>Section Risk</h2>
+        <h2>{mode === 'research' ? '> RISK_ANALYSIS' : 'Section Risk'}</h2>
+        {mode === 'research' ? (
+          <div className="terminal-container">
+            <div className="terminal-header"><div className="terminal-title">MODULE // RISK_DETECTION</div></div>
+            <div className="terminal-content">
+              <table className="terminal-table">
+                <thead><tr><th>[DANGER_LEVEL]</th><th>[EVENTS_COUNT]</th></tr></thead>
+                <tbody>
+                  {sectionRisk.map((row, idx) => (
+                    <tr key={idx}><td>{row.danger_level}</td><td>{row.events_count}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
         <table>
           <thead>
             <tr>
@@ -140,6 +155,7 @@ export default function Dashboard() {
             ))}
           </tbody>
         </table>
+        )}
       </section>
       {/* Ritual performance table */}
       <section className="dashboard-section">
@@ -154,29 +170,44 @@ export default function Dashboard() {
           </h3>
         </div>
         ) : (
-        <div>
-          <h2>Ritual Performance</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Ritual</th>
-                <th>Success Rate</th>
-                <th>Usage</th>
-                <th>Corrupted</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ritualPerf.map((r, idx) => (
-                <tr key={idx}>
-                  <td>{r.name}</td>
-                  <td>{parseFloat(r.success_rate).toFixed(2)}%</td>
-                  <td>{r.usage_count}</td>
-                  <td className={r.corrupted ? 'redacted' : ''}>{r.corrupted ? 'Yes' : 'No'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          <div>
+            <h2>{mode === 'research' ? '> PERFORMANCE_METRICS' : 'Ritual Performance'}</h2>
+            {mode === 'research' ? (
+              <div className="terminal-container">
+                <div className="terminal-header"><div className="terminal-title">MODULE // RITUAL_EFFICIENCY</div></div>
+                <div className="terminal-content">
+                  <table className="terminal-table">
+                    <thead><tr><th>[RITUAL]</th><th>[SUCCESS_RATE]</th><th>[USAGE]</th><th>[CORRUPTED]</th></tr></thead>
+                    <tbody>
+                      {ritualPerf.map((r, idx) => (
+                        <tr key={idx}>
+                          <td>{r.name}</td>
+                          <td>{parseFloat(r.success_rate).toFixed(2)}%</td>
+                          <td>{r.usage_count}</td>
+                          <td>{r.corrupted ? 'YES' : 'NO'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="terminal-prompt">researcher@petsematary:~$ <span className="blink-cursor">_</span></div>
+                </div>
+              </div>
+            ) : (
+              <table>
+                <thead><tr><th>Ritual</th><th>Success Rate</th><th>Usage</th><th>Corrupted</th></tr></thead>
+                <tbody>
+                  {ritualPerf.map((r, idx) => (
+                    <tr key={idx}>
+                      <td>{r.name}</td>
+                      <td>{parseFloat(r.success_rate).toFixed(2)}%</td>
+                      <td>{r.usage_count}</td>
+                      <td className={r.corrupted ? 'redacted' : ''}>{r.corrupted ? 'Yes' : 'No'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         )}
       </section>
     </div>

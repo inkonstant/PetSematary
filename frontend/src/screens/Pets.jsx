@@ -97,7 +97,7 @@ export default function Pets() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Pets
+        {mode === 'research' ? '> ACCESSING_SUBJECT_FILES' : 'Pets'}
       </motion.h2>
       {mode !== 'research' && (
         <div className="search-container">
@@ -111,28 +111,42 @@ export default function Pets() {
       )}
       {/* Render the table differently depending on the mode */}
       {mode === 'research' ? (
-        <div>
-          <p>Total pets: {total}</p>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Species</th>
-                <th>Resurrected</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pets.map((p) => (
-                <tr key={p.id}>
-                  <td>{p.id}</td>
-                  <td>{p.name}</td>
-                  <td>{p.species}</td>
-                  <td>{p.resurrection_status ? 'Yes' : 'No'}</td>
+        <div className="terminal-container">
+          <div className="terminal-header">
+            <div className="terminal-title">CONSOLE // SUBJECT_DATABASE</div>
+            <div className="terminal-controls">
+              <span className="t-dot red"></span>
+              <span className="t-dot yellow"></span>
+              <span className="t-dot green"></span>
+            </div>
+          </div>
+          <div className="terminal-content">
+            <p className="terminal-stats">ENCRYPTION: ACTIVE</p>
+            <p className="terminal-stats">TOTAL_SUBJECTS: {total}</p>
+            <table className="terminal-table">
+              <thead>
+                <tr>
+                  <th>[ID]</th>
+                  <th>[NAME]</th>
+                  <th>[SPECIES]</th>
+                  <th>[RESURRECTED]</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+            </thead>
+              <tbody>
+                {pets.map((p) => (
+                  <tr key={p.id}>
+                    <td>{p.id}</td>
+                    <td>{p.name}</td>
+                    <td>{p.species}</td>
+                    <td>{p.resurrection_status ? 'YES' : 'NO'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="terminal-prompt">
+              researcher@petsematary:~$ <span className="blink-cursor">_</span>
+            </div>
+          </div>
         </div>
       ) : (
         <table>

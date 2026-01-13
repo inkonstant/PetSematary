@@ -91,7 +91,11 @@ export default function Rituals() {
               <th>Chant</th>
               <th>Origin Legend</th>
               <th>Success Rate</th>
-              <th>Forbidden</th>
+              <th>
+                <span className={`censor-tape ${mode === 'redacted' ? 'is-censored' : ''}`}>
+                  Forbidden
+                </span>
+              </th>
             </tr>
           </thead>
           <tbody>

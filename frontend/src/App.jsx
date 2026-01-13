@@ -6,6 +6,7 @@ import Pets from './screens/Pets.jsx';
 import Rituals from './screens/Rituals.jsx';
 import Resurrections from './screens/Resurrections.jsx';
 import { useEffect } from 'react';
+import { useFlashlight } from './hooks/useFlashlight';
 
 /**
  * The root component of the application.  It handles the entry gate
@@ -18,23 +19,7 @@ function AppWrapper() {
   const [screen, setScreen] = useState('dashboard');
   const { mode, setMode } = useReality();
 
-  useEffect(() => {
-    if (mode !== 'redacted') return;
-
-    const interval = setInterval(() => {
-      const candidates = document.querySelectorAll('h1, h2, h3, td, th');
-      if (candidates.length === 0) return;
-
-      const el = candidates[Math.floor(Math.random() * candidates.length)];
-      el.classList.add('glitch');
-
-      setTimeout(() => {
-        el.classList.remove('glitch');
-      }, 400);
-    }, 6000 + Math.random() * 6000); // every 6–12 seconds
-
-    return () => clearInterval(interval);
-  }, [mode]);
+  useFlashlight(mode);
 
   // Helper to render the current screen component.
   const renderScreen = () => {
@@ -85,7 +70,9 @@ function AppWrapper() {
             className={`nav-button ${screen === 'resurrections' ? 'active' : ''}`}
             onClick={() => setScreen('resurrections')}
           >
-            Resurrections
+            <span className={`censor-tape ${mode === 'redacted' ? 'is-censored' : ''}`}>
+              Resurrections
+            </span>
           </button>
         </div>
         {/* Reality Mode selector */}

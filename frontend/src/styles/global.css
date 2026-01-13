@@ -48,7 +48,7 @@ body.mode-redacted {
   --accent-color: #b30000;
   --panel-bg: rgba(16, 16, 16, 0.85);
   cursor: help;
-  animation: breathe 8s infinite ease-in-out;
+  /* animation: breathe 8s infinite ease-in-out; */
 }
 body.mode-research {
   /* Research mode uses a washed out palette reminiscent of an old
@@ -157,6 +157,103 @@ p, li {
   font-weight: bold;
 }
 
+/* Base title */
+.card-title {
+  position: relative;
+  display: inline-block;
+}
+
+/* Redacted mode tape */
+body.mode-redacted .card-title.censored {
+  color: transparent; /* text still exists, but unreadable */
+}
+
+/* The tape */
+body.mode-redacted .card-title.censored::after {
+  content: '';
+  position: absolute;
+  left: -6%;
+  top: 50%;
+  width: 112%;
+  height: 1.4em;
+
+  background: linear-gradient(
+    180deg,
+    #7a0000,
+    #b00000,
+    #7a0000
+  );
+
+  transform: translateY(-50%) rotate(-2deg);
+  box-shadow:
+    0 0 8px rgba(139, 0, 0, 0.8),
+    inset 0 0 4px rgba(0, 0, 0, 0.8);
+
+  z-index: 2;
+}
+
+/* Optional: subtle jitter */
+body.mode-redacted .card-title.censored::after {
+  animation: tape-shift 10s infinite;
+}
+
+/* Generic tape effect (works anywhere) */
+.censor-tape {
+  position: relative;
+  display: inline-block;
+}
+
+body.mode-redacted .censor-tape.is-censored {
+  color: transparent;
+}
+
+body.mode-redacted .censor-tape.is-censored::after {
+  content: '';
+  position: absolute;
+  left: -6%;
+  top: 50%;
+  width: 112%;
+  height: 1.2em;
+
+  background: linear-gradient(180deg, #7a0000, #b00000, #7a0000);
+  transform: translateY(-50%) rotate(-2deg);
+  box-shadow: 0 0 8px rgba(139, 0, 0, 0.8),
+              inset 0 0 4px rgba(0, 0, 0, 0.8);
+  z-index: 2;
+  pointer-events: none;
+  animation: tape-shift 10s infinite;
+}
+
+@keyframes tape-shift {
+  0%, 92% { transform: translateY(-50%) rotate(-2deg); }
+  94% { transform: translateY(-48%) rotate(-1deg); }
+  96% { transform: translateY(-50%) rotate(-2deg); }
+}
+
+/* Navbar-specific tape scaling */
+.nav-item-title.censored::after {
+  height: 1.1em;
+  top: 50%;
+  left: -8%;
+  width: 116%;
+}
+
+body.mode-redacted .nav-item-title.censored:hover::after {
+  transform: translateY(-50%) rotate(-4deg);
+}
+
+.denial-text {
+  font-style: italic;
+  color: #a2a0a0;
+  max-width: 1000px;
+  line-height: 1.5;
+}
+
+body.mode-redacted .denial-text::after {
+  content: ' [REVIEW PENDING]';
+  color: darkred;
+}
+
 /* Tables */
 table {
   width: 100%;
@@ -235,7 +332,7 @@ th {
   );
   padding: 0 4px;
   text-shadow: 0 0 6px rgba(139,0,0,0.8);
-  animation: flicker 3s infinite ease-in-out;
+  /* animation: flicker 3s infinite ease-in-out; */
 }
 
 /* Glitch effect for text.  We create two pseudo-elements that shift
@@ -265,6 +362,51 @@ th {
   left: -2px;
   text-shadow: -2px 0 var(--accent-color);
   animation: glitch-anim-2 3s infinite linear alternate-reverse;
+}
+
+body.mode-redacted .card,
+body.mode-redacted table {
+  position: relative;
+  border: 1px solid rgba(139, 0, 0, 0.4);
+  animation: drift 18s infinite ease-in-out;
+}
+
+body.mode-redacted .panel {
+  animation: blink 22s infinite;
+}
+
+@keyframes blink {
+  0%, 96% { opacity: 1; }
+  97% { opacity: 0.6; }
+  98% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes drift {
+  0%   { transform: translate(0, 0); }
+  40%  { transform: translate(0, 0); }
+  45%  { transform: translate(1px, -1px); }
+  50%  { transform: translate(-1px, 1px); }
+  55%  { transform: translate(0, 0); }
+  100% { transform: translate(0, 0); }
+}
+
+body.mode-redacted table::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(139, 0, 0, 0.8);
+  transform: translate(1px, -1px);
+  opacity: 0;
+  pointer-events: none;
+  animation: border-flicker 12s infinite;
+}
+
+@keyframes border-flicker {
+  0%, 90% { opacity: 0; }
+  92% { opacity: 0.8; }
+  94% { opacity: 0.9; }
+  100% { opacity: 1; }
 }
 
 @keyframes glitch-anim-1 {
@@ -422,4 +564,38 @@ th {
     transparent
   );
   opacity: 0.6;
+}
+
+/* === Flashlight Effect (Redacted Mode) === */
+
+body.mode-redacted::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+
+  background: radial-gradient(
+    circle at var(--mouse-x, 100%) var(--mouse-y, 100%),
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0.2) 60px,
+    rgba(0, 0, 0, 0.85) 160px,
+    rgba(0, 0, 0, 0.95) 260px
+  );
+
+  transition: background 0.08s ease-out;
+}
+
+body.mode-redacted::after {
+  animation: vignette-pulse 18s infinite alternate;
+}
+
+@keyframes vignette-pulse {
+  from { opacity: 1; }
+  to   { opacity: 0.94; }
+}
+
+/* Optional: slightly dim the whole UI in redacted mode */
+body.mode-redacted {
+  background-color: #080808;
 }

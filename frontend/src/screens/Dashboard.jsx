@@ -6,6 +6,7 @@ import {
   getRitualPerformance,
 } from '../api/client.js';
 import { useReality } from '../context/RealityContext.jsx';
+import { useUnstableNumber } from '../hooks/useUnstableNumber';
 
 /**
  * Dashboard screen displays aggregated statistics about the cemetery,
@@ -20,6 +21,26 @@ export default function Dashboard() {
   const [ritualPerf, setRitualPerf] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const unstableTotalPets = useUnstableNumber(
+    overview?.totalPets ?? 0,
+    mode
+  );
+
+  const unstableResurrectedPets = useUnstableNumber(
+    overview?.resurrectedPets ?? 0,
+    mode
+  );
+
+  const unstableTotalEvents = useUnstableNumber(
+    overview?.totalEvents ?? 0,
+    mode
+  );
+
+  const unstableHighRiskSections = useUnstableNumber(
+    overview?.highRiskSections ?? 0,
+    mode
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -72,23 +93,31 @@ export default function Dashboard() {
         <div className="cards">
           <div className="card">
             <h3>Total Pets</h3>
-            <p>{overview.totalPets}</p>
+            <p>{unstableTotalPets}</p>
           </div>
           <div className="card">
-            <h3>Resurrected Pets</h3>
-            <p>{overview.resurrectedPets}</p>
+            <h3 className="card-title">
+              <span className={`censor-tape ${mode === 'redacted' ? 'is-censored' : ''}`}>
+                Resurrected Pets
+              </span>
+            </h3>            
+            <p>{unstableResurrectedPets}</p>
           </div>
           <div className="card">
             <h3>Total Events</h3>
-            <p>{overview.totalEvents}</p>
+            <p>{unstableTotalEvents}</p>
           </div>
           <div className="card">
-            <h3>Forbidden Rituals</h3>
+            <h3 className="card-title">
+              <span className={`censor-tape ${mode === 'redacted' ? 'is-censored' : ''}`}>
+                Forbidden Rituals
+              </span>
+            </h3>
             <p>{overview.forbiddenRituals}</p>
           </div>
           <div className="card">
             <h3>High‑Risk Sections</h3>
-            <p>{overview.highRiskSections}</p>
+            <p>{unstableHighRiskSections}</p>
           </div>
         </div>
       </section>
@@ -117,7 +146,12 @@ export default function Dashboard() {
         { mode === 'redacted' ? (
         <div>
           <h2>Ritual Performance</h2>
-          <h3>This section has been removed.</h3>
+          <h3 className="denial-text">
+            The evaluation of ritual efficacy has been
+            ████████████████████████████ due to
+            ███████████ anomalies observed during
+            ████████████████████████████.
+          </h3>
         </div>
         ) : (
         <div>

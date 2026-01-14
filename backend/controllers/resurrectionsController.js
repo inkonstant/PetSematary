@@ -11,12 +11,19 @@ exports.getAllResurrections = async (req, res, next) => {
   const mode = (req.query.mode || 'official').toLowerCase();
   try {
     const rows = await db.query(
-      `SELECT re.id, re.pet_id, p.name AS pet_name,
-              re.performed_by, o.name AS performer_name,
-              re.ritual_name, re.date, re.time, re.moon_phase, re.weather
-         FROM Resurrection_Event re
-         LEFT JOIN Pet p ON re.pet_id = p.id
-         LEFT JOIN Owner o ON re.performed_by = o.id`
+      `SELECT re.id,
+              re.pet_id,
+              p.name AS pet_name,
+              o.id AS performed_by,
+              o.name AS performer_name,
+              re.ritual_name,
+              re.date,
+              re.time,
+              re.moon_phase,
+              re.weather
+        FROM Resurrection_Event re
+        LEFT JOIN Pet p ON re.pet_id = p.id
+        LEFT JOIN Owner o ON p.owner_id = o.id`
     );
     if (mode === 'research') {
       const minimal = rows.map((row) => ({

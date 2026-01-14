@@ -199,9 +199,9 @@ export default function Dashboard() {
                   {ritualPerf.map((r, idx) => (
                     <tr key={idx}>
                       <td>{r.name}</td>
-                      <td>{parseFloat(r.success_rate).toFixed(2)}%</td>
+                      <td>{parseFloat(r.success_rate).toFixed(1)}%</td>
                       <td>{r.usage_count}</td>
-                      <td className={r.corrupted ? 'redacted' : ''}>{r.corrupted ? 'Yes' : 'No'}</td>
+                      <td >{r.corrupted ? 'Yes' : 'No'}</td>
                     </tr>
                   ))}
                 </tbody>

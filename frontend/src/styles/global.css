@@ -576,7 +576,7 @@ body.mode-redacted::after {
   z-index: 9999;
 
   background: radial-gradient(
-    circle at var(--mouse-x, 200%) var(--mouse-y, 200%),
+    circle at var(--mouse-x, 250%) var(--mouse-y, 250%),
     rgba(0, 0, 0, 0) 0px,
     rgba(0, 0, 0, 0.2) 60px,
     rgba(0, 0, 0, 0.85) 160px,

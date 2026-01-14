@@ -10,7 +10,18 @@ const { normalizeBit } = require('../utils/dbUtils');
 exports.getAllRituals = async (req, res, next) => {
   const mode = (req.query.mode || 'official').toLowerCase();
   try {
-    const rows = await db.query('SELECT * FROM Ritual');
+    const rows = await db.query(`
+      SELECT
+        r.name, 
+        r.required_items,
+        r.chant,
+        r.origin_legend,
+        r.success_rate,
+        r.forbidden,
+        rc.name AS corrupted_name
+      FROM Ritual r
+      LEFT JOIN RITUAL_CORRUPTION rc ON r.name = rc.name;
+      `);
     if (mode === 'research') {
       const minimal = rows.map((r) => ({
         name: r.name,
@@ -25,9 +36,9 @@ exports.getAllRituals = async (req, res, next) => {
     }
     if (mode === 'redacted') {
       const redacted = rows.map((r) => {
-        const successRate = parseFloat(r.success_rate);
-        if (normalizeBit(r.forbidden)) {
-          return { ...r,success_rate: parseFloat(r.success_rate), name: '[REDACTED]', required_items: '[REDACTED]', chant: '[REDACTED]', origin_legend: '[REDACTED]', success_rate: '[REDACTED]', forbidden: '[REDACTED]' };
+        corrupted = r.corrupted_name !== null;
+        if (corrupted || normalizeBit(r.forbidden)) {
+          return { ...r,success_rate: parseFloat(r.success_rate), required_items: '[REDACTED]', chant: '[REDACTED]', forbidden: normalizeBit(r.forbidden) };
         }
         return { ...r, forbidden: normalizeBit(r.forbidden) };
       });

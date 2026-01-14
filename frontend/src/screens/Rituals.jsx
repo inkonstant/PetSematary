@@ -129,28 +129,28 @@ export default function Rituals() {
                   {r.required_items === '[REDACTED]' ? (
                     <span className="redacted">[REDACTED]</span>
                   ) : (
-                    r.required_items
+                    r.required_items  || '-'
                   )}
                 </td>
                 <td>
                   {r.chant === '[REDACTED]' ? (
                     <span className="redacted">[REDACTED]</span>
                   ) : (
-                    r.chant
+                    r.chant  || '-'
                   )}
                 </td>
                 <td>
                   {r.origin_legend === '[REDACTED]' ? (
                     <span className="redacted">[REDACTED]</span>
                   ) : (
-                    r.origin_legend
+                    r.origin_legend  || '-'
                   )}
                 </td>
                 <td>
                   {r.success_rate === '[REDACTED]' ? (
                     <span className="redacted">[REDACTED]</span>
                   ) : (
-                    parseFloat(r.success_rate).toFixed(2) + '%'
+                    parseFloat(r.success_rate).toFixed(2) + '%'  || '-'
                   )}
                 </td>
                 <td>

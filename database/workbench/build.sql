@@ -1,5 +1,5 @@
-DROP SCHEMA IF EXISTS pet_sematary_db;
-CREATE SCHEMA pet_sematary_db;
+DROP DATABASE IF EXISTS pet_sematary_db;
+CREATE DATABASE pet_sematary_db;
 USE pet_sematary_db;
 
 -- ==========================================

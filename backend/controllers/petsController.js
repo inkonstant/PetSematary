@@ -18,7 +18,7 @@ exports.getAllPets = async (req, res, next) => {
     // Fetch all pets with their owner information. Joining on Owner allows us
     // to expose owner_name and mental_state in a single query.
     const rows = await db.query(
-      `SELECT p.id, p.name, p.owner_id, p.burial_plot_id, p.species, p.date_of_birth,
+      `SELECT p.id, p.name, p.owner_id, p.section_name, p.plot_number, p.species, p.date_of_birth,
               p.date_of_death, p.cause_of_death, p.resurrection_status,
               p.temperament, p.appearance_changes,
               o.name AS owner_name, o.mental_state
@@ -53,7 +53,8 @@ exports.getAllPets = async (req, res, next) => {
           owner_id: row.owner_id,
           owner_name: row.owner_name,
           mental_state: row.mental_state,
-          burial_plot_id: row.burial_plot_id,
+          section_name: row.section_name,
+          plot_number: row.plot_number,
           species: row.species,
           date_of_birth: row.date_of_birth,
           date_of_death: row.date_of_death,
@@ -91,7 +92,8 @@ exports.getAllPets = async (req, res, next) => {
         resurrection_status: '[REDACTED]',
 
         // SAFE STRUCTURAL INFO
-        burial_plot_id: row.burial_plot_id,
+        section_name: row.section_name,
+        plot_number: row.plot_number,
         species: row.species,
         date_of_birth: row.date_of_birth,
       }));
@@ -127,7 +129,7 @@ exports.getPetById = async (req, res, next) => {
     // Fetch the pet with its owner and burial plot. We include section_name
     // for potential future use, though it is not displayed in this endpoint.
     const rows = await db.query(
-      `SELECT p.id, p.name, p.owner_id, p.burial_plot_id, p.species,
+      `SELECT p.id, p.name, p.owner_id, p.section_name, p.plot_number, p.species,
               p.date_of_birth, p.date_of_death, p.cause_of_death,
               p.resurrection_status, p.temperament, p.appearance_changes,
               o.name AS owner_name, o.mental_state
@@ -164,9 +166,7 @@ exports.getPetById = async (req, res, next) => {
       return res.json({
         success: true,
         data: {
-          id: pet.id,
           name: pet.name,
-          owner_id: pet.owner_id,
           owner_name: pet.owner_name,
           species: pet.species,
 
@@ -179,7 +179,8 @@ exports.getPetById = async (req, res, next) => {
           cause_of_death: '[REDACTED]',
 
           // Safe structural info
-          burial_plot_id: pet.burial_plot_id,
+          section_name: pet.section_name,
+          plot_number: pet.plot_number,
           temperament: '[REDACTED]',
           appearance_changes: '[REDACTED]',
           resurrection_status: '[REDACTED]',
@@ -193,12 +194,11 @@ exports.getPetById = async (req, res, next) => {
     return res.json({
       success: true,
       data: {
-        id: pet.id,
         name: pet.name,
-        owner_id: pet.owner_id,
         owner_name: pet.owner_name,
         mental_state: pet.mental_state,
-        burial_plot_id: pet.burial_plot_id,
+        section_name: pet.section_name,
+        plot_number: pet.plot_number,
         species: pet.species,
         date_of_birth: pet.date_of_birth,
         date_of_death: pet.date_of_death,
@@ -224,7 +224,8 @@ exports.createPet = async (req, res, next) => {
   const requiredFields = [
     'name',
     'owner_id',
-    'burial_plot_id',
+    'section_name',
+    'plot_number',
     'species',
     'date_of_birth',
     'date_of_death',
@@ -240,13 +241,14 @@ exports.createPet = async (req, res, next) => {
   }
   try {
     const result = await db.query(
-      `INSERT INTO Pet (name, owner_id, burial_plot_id, species, date_of_birth, date_of_death,
+      `INSERT INTO Pet (name, owner_id, section_name, plot_number, species, date_of_birth, date_of_death,
                         cause_of_death, resurrection_status, temperament, appearance_changes)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         body.name,
         body.owner_id,
-        body.burial_plot_id,
+        body.section_name,
+        body.plot_number,
         body.species,
         body.date_of_birth,
         body.date_of_death,
@@ -285,7 +287,8 @@ exports.updatePet = async (req, res, next) => {
   const allowedFields = [
     'name',
     'owner_id',
-    'burial_plot_id',
+    'section_name',
+    'plot_number',
     'species',
     'date_of_birth',
     'date_of_death',

@@ -172,10 +172,10 @@ export default function Resurrections() {
                     <td>{ev.pet_name || ev.pet_id}</td>
                     <td>{performer_name || ev.performed_by}</td>
                     <td>{ritual_name}</td>
-                    <td>{ev.date}</td>
-                    <td>{ev.time}</td>
-                    <td>{ev.moon_phase}</td>
-                    <td>{ev.weather}</td>
+                    <td>{ev.date  || '-'}</td>
+                    <td>{ev.time  || '-'}</td>
+                    <td>{ev.moon_phase  || '-'}</td>
+                    <td>{ev.weather  || '-'}</td>
                   </tr>
                 );
               })}

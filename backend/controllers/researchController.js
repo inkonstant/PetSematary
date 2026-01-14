@@ -43,13 +43,26 @@ exports.getOverview = async (req, res, next) => {
 exports.getSectionsRisk = async (req, res, next) => {
   try {
     const rows = await db.query(
-      `SELECT s.danger_level,
-              COUNT(re.id) AS events_count
-         FROM Section s
-         LEFT JOIN Burial_Plot bp ON s.name = bp.section_name
-         LEFT JOIN Pet p ON bp.id = p.burial_plot_id
-         LEFT JOIN Resurrection_Event re ON p.id = re.pet_id
-        GROUP BY s.danger_level`
+      `SELECT
+          levels.danger_level,
+          COALESCE(COUNT(re.id), 0) AS events_count
+        FROM (
+          SELECT 'low' AS danger_level
+          UNION ALL SELECT 'mid'
+          UNION ALL SELECT 'high'
+          UNION ALL SELECT 'cursed'
+        ) AS levels
+        LEFT JOIN Section s
+          ON s.danger_level = levels.danger_level
+        LEFT JOIN Burial_Plot bp
+          ON bp.section_name = s.name
+        LEFT JOIN Pet p
+          ON p.section_name = bp.section_name
+        AND p.plot_number  = bp.plot_number
+        LEFT JOIN Resurrection_Event re
+          ON re.pet_id = p.id
+        GROUP BY levels.danger_level
+        ORDER BY FIELD(levels.danger_level, 'low','mid','high','cursed');`
     );
     return res.json({
       success: true,

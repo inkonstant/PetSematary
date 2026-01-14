@@ -156,7 +156,11 @@ export default function Pets() {
               <th>Species</th>
               <th>Owner</th>
               <th>Cause of Death</th>
-              <th>Resurrected</th>
+              <th>
+                <span className={`censor-tape ${mode === 'redacted' ? 'is-censored' : ''}`}>
+                  Resurrected
+                </span>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -169,7 +173,7 @@ export default function Pets() {
                   {p.cause_of_death === '[REDACTED]' ? (
                     <span className="redacted">[REDACTED]</span>
                   ) : (
-                    p.cause_of_death
+                    p.cause_of_death || '-'
                   )}
                 </td>
                 <td>

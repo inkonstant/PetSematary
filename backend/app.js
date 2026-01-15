@@ -9,7 +9,10 @@ const app = express();
 
 // Enable CORS for all origins. This makes it possible for the frontend
 // running on a different origin (e.g. a file on disk) to call the API.
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  credentials: true
+}));
 
 // Built‑in middleware to parse JSON bodies and URL‑encoded data.
 app.use(express.json());

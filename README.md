@@ -214,9 +214,9 @@ SQL views are used for higher-level logic and analysis
 
 Group 7 – Aristotle University of Thessaloniki
 
-- Yiannis Konstantikos
+- Yiannis Konstantakis
 - Vlassis Voulkidis
-- Elias Mastrogiannis
+- Ilias Mastrogiannis
 
 ## Disclaimer
 
